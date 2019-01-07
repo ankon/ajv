@@ -76,11 +76,6 @@
 #}}
 
 
-{{## def.willOptimize:
-  it.util.varOccurences($code, $nextData) < 2
-#}}
-
-
 {{## def.generateSubschemaCode:
   {{
     var $code = it.validate($it);
@@ -95,14 +90,12 @@
 #}}
 
 
-{{## def._optimizeValidate:
-  it.util.varReplace($code, $nextData, $passData)
-#}}
-
-
 {{## def.optimizeValidate:
-  {{? {{# def.willOptimize}} }}
-    {{= {{# def._optimizeValidate }} }}
+  {{
+    var $match = it.util.singleMatch($code, $nextData);
+  }}
+  {{? $match }}
+    {{= it.util.replaceMatch($match, $code, $nextData, $passData) }}
   {{??}}
     var {{=$nextData}} = {{=$passData}};
     {{= $code }}
